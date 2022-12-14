@@ -10,5 +10,5 @@ include_directories("/home/nima/local-libs/onnxGPU/include")
 
 link_directories("/home/nima/local-libs/onnxGPU/lib")
 
-add_executable(${PROJECT_NAME} "src/main.cpp" "src/FScls.cpp")
+add_executable(${PROJECT_NAME} "src/main.cpp" "src/VehicleClassification.cpp")
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCV_LIBS} -lonnxruntime)
