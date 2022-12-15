@@ -77,4 +77,16 @@ void VehicleClassification::setOutputNamesAndShape(){
     }
 }
 
+float VehicleClassification::inference(cv::Mat img){
+    preProc(img);
+}
 
+void VehicleClassification::preProc(cv::Mat img){
+    // Scale input to 160x160
+    cv::Mat resized_img, float_img;
+    cv::resize(img, resized_img, cv::Size(input_width, input_height), cv::INTER_AREA);
+    // Convert to float
+    resized_img.convertTo(float_img, CV_32FC3);
+    // Populate image_blob
+    memcpy(image_blob, float_img.ptr<float>(0), sizeof(float)/sizeof(char) * input_tensor_size);
+}
