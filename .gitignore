@@ -1,4 +1,5 @@
-cars_train
-saved_model
+sample_imgs
+model/*
+!model/vehicle_detector_model.onnx
 build
 .vscode
