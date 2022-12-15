@@ -1,5 +1,7 @@
 #include "VehicleClassification.hpp"
 #include <fstream>
+#include <stdlib.h>
+#include <assert.h>
 
 VehicleClassification::VehicleClassification(const std::string config_file_path){
     readConfigFile(config_file_path);
@@ -79,6 +81,7 @@ void VehicleClassification::setOutputNamesAndShape(){
 
 float VehicleClassification::inference(cv::Mat img){
     preProc(img);
+    return runModel();
 }
 
 void VehicleClassification::preProc(cv::Mat img){
@@ -89,4 +92,23 @@ void VehicleClassification::preProc(cv::Mat img){
     resized_img.convertTo(float_img, CV_32FC3);
     // Populate image_blob
     memcpy(image_blob, float_img.ptr<float>(0), sizeof(float)/sizeof(char) * input_tensor_size);
+}
+
+float VehicleClassification::runModel(){
+    std::vector<float> input_tensor_values(image_blob, image_blob+input_tensor_size);
+    Ort::MemoryInfo mem_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
+    Ort::Value input_tensor = Ort::Value::CreateTensor<float>(mem_info, 
+                                                              input_tensor_values.data(),
+                                                              input_tensor_size, 
+                                                              input_shapes.data(),
+                                                              input_shapes.size());
+    assert(input_tensor.IsTensor());
+    std::vector<Ort::Value> output_tensor = session_cls->Run(Ort::RunOptions{nullptr},
+                                                             input_names.data(),
+                                                             &input_tensor,
+                                                             1,
+                                                             output_names.data(),
+                                                             1);
+    float* raw_output = output_tensor[0].GetTensorMutableData<float>();
+    return *raw_output;
 }

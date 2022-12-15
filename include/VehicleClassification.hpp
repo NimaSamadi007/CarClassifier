@@ -5,6 +5,7 @@
 #include <opencv2/opencv.hpp>
 #include <string>
 #include <memory>
+#include <vector>
 #include "json.hpp"
 
 namespace nl=nlohmann;
@@ -15,19 +16,19 @@ private:
     std::string model_path;
     unsigned int num_cpu_threads;
     bool use_gpu;
-    const int batch_size = 1;
-    const int input_width = 160;
-    const int input_height = 160;
-    const int input_tensor_size = batch_size*input_width*input_height*3;
+    static constexpr int64_t batch_size = 1;
+    static constexpr int64_t input_width = 160;
+    static constexpr int64_t input_height = 160;
+    static constexpr int64_t input_tensor_size = batch_size*input_width*input_height*3;
+    std::vector<int64_t> input_shapes{batch_size, input_height, input_width, 3};
 
     // Variables
     std::shared_ptr<Ort::Env> env_cls;
     std::shared_ptr<Ort::Session> session_cls;
-    float image_blob[input_tensor_size] = {0.0};
+    float* image_blob = new float[input_tensor_size];
 
     std::vector<const char*> input_names;
     std::vector<const char*> output_names;
-
 
     // Methods
     void readConfigFile(const std::string config_file_path);
@@ -38,6 +39,7 @@ private:
     void setInputNamesAndShape();
     void setOutputNamesAndShape();
     void preProc(cv::Mat img);
+    float runModel(void);
 public:
     VehicleClassification(const std::string config_file_path);
     float inference(cv::Mat img);
