@@ -2,6 +2,7 @@
 #include <exception>
 #include <stdlib.h>
 #include "VehicleClassification.hpp"
+#include <chrono>
 
 void runOneShotMode(char* img_path);
 void runContinousMode();
@@ -78,7 +79,12 @@ void runContinousMode(){
 }
 
 std::string runModel(VehicleClassification& model, cv::Mat input_img){
+    // Uncomment to benchmark inference time
+    // auto start = std::chrono::high_resolution_clock::now();
     auto model_output = model.inference(input_img);
+    // auto finish = std::chrono::high_resolution_clock::now();
+    // double elapsed_time = std::chrono::duration<double, std::milli>(finish-start).count();
+    // std::cout << "Inference time: " << elapsed_time << std::endl;   
     std::string label;
     if(model_output >= 0)
         label = "car";
