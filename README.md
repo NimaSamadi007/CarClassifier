@@ -1,10 +1,17 @@
 # Car Classifier in C++
 
-This repository contains a simple car classifier in C++. The model is trained in Python with Tensorflow and then converted to ONNX format. Classification is done in C++ with ONNXRuntime. Base model is MobileNetV2 and a simple classifier is added on top of it. 
+This repository contains a simple car classifier in C++. In this README file the flow of the project is described. The following image summarizes the steps of the project:
 
-## Requirements
+![project flow diagram](assets/flow.jpg)
 
-## Training
+## Contents
++ [Model Training](#model-training)
++ [Conversion to ONNX](#conversion-to-onnx)
++ [Inference](#inference)
 
-## Inferece
 
+## Model Training
+
+## Conversion to ONNX
+
+## Inference
