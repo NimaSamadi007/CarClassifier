@@ -25,7 +25,7 @@ private:
     // Variables
     std::shared_ptr<Ort::Env> env_cls;
     std::shared_ptr<Ort::Session> session_cls;
-    float* image_blob = new float[input_tensor_size];
+    float* image_blob;
 
     std::vector<const char*> input_names;
     std::vector<const char*> output_names;
@@ -42,6 +42,7 @@ private:
     float runModel(void);
 public:
     VehicleClassification(const std::string config_file_path);
+    ~VehicleClassification();
     float inference(cv::Mat img);
 };
 

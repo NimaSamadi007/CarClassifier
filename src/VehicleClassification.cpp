@@ -8,6 +8,8 @@ VehicleClassification::VehicleClassification(const std::string config_file_path)
     setEnvAndSession();
     setInputNamesAndShape();
     setOutputNamesAndShape();
+    // Allocate image blob memory:
+    this->image_blob = new float[input_tensor_size];
     std::cout << "VehicleClassification instance initialized successfully" << std::endl;
 }
 
@@ -111,4 +113,8 @@ float VehicleClassification::runModel(){
                                                              1);
     float* raw_output = output_tensor[0].GetTensorMutableData<float>();
     return *raw_output;
+}
+
+VehicleClassification::~VehicleClassification(){
+    delete[] this->image_blob;
 }
